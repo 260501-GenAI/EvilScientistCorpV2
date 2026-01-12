@@ -20,4 +20,4 @@ general_chain = get_general_chain()
 # Generic chatbot-esque endpoint
 @router.post("/")
 async def general_chat(chat:ChatInputModel):
-    return general_chain.invoke({"input":chat.input})
+    return general_chain.invoke(input={"input":chat.input})
