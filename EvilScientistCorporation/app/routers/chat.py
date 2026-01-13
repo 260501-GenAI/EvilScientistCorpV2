@@ -83,17 +83,19 @@ async def get_item_recommendations(amount: int = 3):
     You are an evil sales assistant at the Evil Scientist Corporation. 
     Share {amount} of the most popular evil items on the market right now. 
     
-    Format each item into a typing.list of JSON objects called "items", so I can parse into Pydantic
-    
-    Here's the Pydantic Model to base the JSON objects on:
-     {{  "items": [
-            id: Annotated[int, Field(gt=0)] = None
-            name: Annotated[str, Field(min_length=3, max_length=50)]
-            description: Annotated[str, Field(min_length=10, max_length=100)]
-            inventory: Annotated[int, Field(ge=0, le=100)]
-            price: Annotated[float, Field(gt=0)]
-            ]
-     }}
+    Format the response as a single JSON object with the following structure:
+    {{
+        "items": [
+            {{
+                "id": int (greater than 0),
+                "name": str (3-50 characters),
+                "description": str (10-100 characters),
+                "inventory": int (0-100),
+                "price": float (greater than 0 with no commas in the numbers)
+            }},
+            ...
+        ]
+    }}
     
     Return ONLY the JSON, no extra text.
     """
