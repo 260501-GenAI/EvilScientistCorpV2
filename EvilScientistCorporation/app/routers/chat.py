@@ -41,4 +41,3 @@ async def summarize_plans():
             f"{evil_plans_text}"
         }
     )
-
