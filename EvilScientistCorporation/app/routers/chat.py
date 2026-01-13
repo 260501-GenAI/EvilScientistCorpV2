@@ -50,7 +50,8 @@ async def analyze_data(chat:ChatInputModel):
     loader = CSVLoader("app/files_to_load/sales_data.csv")
     docs = loader.load()
 
-    sales_data_csv = docs[0].page_content
+    # Convert the loaded documents into a single CSV string
+    sales_data_csv = "\n".join(doc.page_content for doc in docs)
 
     # Invoke the LLM with another small prompt encouraging data analysis
     return general_chain.invoke(
