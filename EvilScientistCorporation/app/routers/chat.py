@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from langchain_community.document_loaders import TextLoader
+from langchain_community.document_loaders import TextLoader, CSVLoader
 from pydantic import BaseModel
 
 from app.services.chain_service import get_general_chain
@@ -23,7 +23,7 @@ general_chain = get_general_chain()
 async def general_chat(chat:ChatInputModel):
     return general_chain.invoke(input={"input":chat.input})
 
-# Endpoint that summarizes a .txt file
+# DOCUMENT LOADING EXAMPLE: Endpoint that summarizes a .txt file
 @router.get("/plan-summary")
 async def summarize_plans():
 
@@ -39,5 +39,25 @@ async def summarize_plans():
         {
             "input": f"Concisely summarize the following text from my boss: "
             f"{evil_plans_text}"
+        }
+    )
+
+# DOCUMENT LOADING EXAMPLE: Endpoint that lets user ask questions about a .csv file
+@router.post("/data-analysis")
+async def analyze_data(chat:ChatInputModel):
+
+    # Load in .csv file
+    loader = CSVLoader("app/files_to_load/sales_data.csv")
+    docs = loader.load()
+
+    sales_data_csv = docs[0].page_content
+
+    # Invoke the LLM with another small prompt encouraging data analysis
+    return general_chain.invoke(
+        {
+            "input": f"Answer the following question based on the provided sales data: "
+                     f"{chat.input}"
+                     f"Here's the sales data: "
+                     f"{sales_data_csv}"
         }
     )
