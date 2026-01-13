@@ -21,7 +21,7 @@ class ChatInputModel(BaseModel):
 
 # Here's another short model that will help us format responses into Pydantic Lists
 class ItemListModel(BaseModel):
-    items:List[ItemModel] # A list of our ItemModel from models/item_model.py
+    items:list[ItemModel] # A list of our ItemModel from models/item_model.py
 
 # Import the chain-creation functions from the chain service here
 general_chain = get_general_chain()
@@ -86,11 +86,14 @@ async def get_item_recommendations(amount: int = 3):
     Format each item into a typing.list of JSON objects called "items", so I can parse into Pydantic
     
     Here's the Pydantic Model to base the JSON objects on:
-        id: Annotated[int, Field(gt=0)] = None
-        name: Annotated[str, Field(min_length=3, max_length=50)]
-        description: Annotated[str, Field(min_length=10, max_length=100)]
-        inventory: Annotated[int, Field(ge=0, le=100)]
-        price: Annotated[float, Field(gt=0)]
+     {{  "items": [
+            id: Annotated[int, Field(gt=0)] = None
+            name: Annotated[str, Field(min_length=3, max_length=50)]
+            description: Annotated[str, Field(min_length=10, max_length=100)]
+            inventory: Annotated[int, Field(ge=0, le=100)]
+            price: Annotated[float, Field(gt=0)]
+            ]
+     }}
     
     Return ONLY the JSON, no extra text.
     """
