@@ -116,7 +116,7 @@ async def get_item_recommendations(amount: int = 3):
 @router.post("/memory-chat")
 async def chat_with_memory(chat:ChatInputModel):
     # That's it! The chain will remember the last "k" interactions automatically
-    memory_chain.invoke(input=chat.input)
+    return memory_chain.invoke(input=chat.input)
 
 
 # You can ignore this - I stole it from Shane for week 4 cuz I liked it
