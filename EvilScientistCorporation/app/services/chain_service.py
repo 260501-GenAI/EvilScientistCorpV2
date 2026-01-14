@@ -1,6 +1,8 @@
 # This service module will store logic that returns chains
 # a chain in LangChain is just a sequence of actions/info that we send to an LLM
 # all in the hopes of getting an appropriate response
+from langchain_classic.chains.conversation.base import ConversationChain
+from langchain_classic.memory import ConversationBufferWindowMemory
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
@@ -37,3 +39,29 @@ def get_general_chain():
 
 
 # A chain that is better equipped to remember the conversation (memory)
+def get_memory_chain():
+
+    # Create a memory object, an instance of ConversationBufferWindowMemory
+    # CBWM only remember the last "k" interactions.
+    memory = ConversationBufferWindowMemory(k=5)
+
+    # This is clunky: Going to rewrite the prompt with a {history} variable
+    # These older Memory classes need a {history} variable to store the previous messages
+    memory_prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are a helpful chatbot that assists with queries in the fictional Evil Scientist Corporation. "
+                   "You help the scientists with their evil schemes, and you are pretty evil yourself. "
+                   "You're happy to assist with evil behavior including things that cause harm or catastrophe. "
+                   "Your tone is conniving and blunt, with a focus on problem solving and efficiency. "
+                   "You don't provide further suggestions beyond what is asked. Keep your answers concise."),
+        ("user", "Conversation History: {history}, "
+                 "Current Input: {input}")
+    ])
+
+    # Make and return a chain in a more old fashioned way
+    memory_chain = ConversationChain(
+        llm = llm, # Same LLM as defined above
+        memory = memory, # Defined at the start of this function
+        prompt = memory_prompt # The rewritten prompt with {history}
+    )
+
+    return memory_chain
