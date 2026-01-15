@@ -1,6 +1,6 @@
 from langchain_classic.chains.conversation.base import ConversationChain
 from langchain_classic.chains.transform import TransformChain
-from langchain_classic.memory import ConversationBufferWindowMemory
+from langchain_classic.memory import ConversationBufferWindowMemory, ConversationSummaryMemory
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
@@ -79,7 +79,11 @@ def get_memory_chain():
 
     # Create a memory object, an instance of ConversationBufferWindowMemory
     # CBWM only remember the last "k" interactions.
-    memory = ConversationBufferWindowMemory(k=5)
+    # memory = ConversationBufferWindowMemory(k=5)
+
+    # Maybe a summary memory is better? I don't like losing older interactions
+    # It SUMMARIZES the chat history instead of dropping older interactions entirely
+    memory = ConversationSummaryMemory(llm=llm)
 
     # This is clunky: Going to rewrite the prompt with a {history} variable
     # These older Memory classes need a {history} variable to store the previous messages
@@ -109,7 +113,7 @@ def get_bad_word_filter_chain():
     filter_chain = TransformChain(
         input_variables=["input"],
         output_variables=["output"],
-        transform=bad_word_filter # transform function defined above
+        transform=bad_word_filter # transform function defined above - invoked at .invoke() time
         # Ignore the "unexpected arg" error, it should work.
     )
 
