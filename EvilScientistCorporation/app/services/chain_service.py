@@ -1,11 +1,12 @@
+from langchain_classic.chains.conversation.base import ConversationChain
+from langchain_classic.chains.transform import TransformChain
+from langchain_classic.memory import ConversationBufferWindowMemory
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama import ChatOllama
+
 # This service module will store logic that returns chains
 # a chain in LangChain is just a sequence of actions/info that we send to an LLM
 # all in the hopes of getting an appropriate response
-from langchain_classic.chains.conversation.base import ConversationChain
-from langchain_classic.memory import ConversationBufferWindowMemory
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_ollama import ChatOllama
 
 # Define the LLM we're going to use
 llm = ChatOllama(
@@ -22,6 +23,18 @@ prompt = ChatPromptTemplate.from_messages([
                "You don't provide further suggestions beyond what is asked. Keep your answers concise."),
     ("user", "{input}")
 ])
+
+# Defining some filter logic for our TransformChain
+def bad_word_filter(inputs):
+
+    # Capture the User's input as a string
+    user_input = inputs["input"]
+
+    # If the input contains "javascript", block it. Otherwise, answer with general chat
+    if "javascript" in user_input.lower():
+        return {"output":"I won't talk about that forbidden language"}
+    else:
+        return {"output":get_general_chain().invoke(user_input)}
 
 # Basic general chain here
 def get_general_chain():
@@ -88,3 +101,16 @@ def get_memory_chain():
     )
 
     return memory_chain
+
+# TRANSFORMCHAIN EXAMPLE (A Legacy Chain)
+def get_bad_word_filter_chain():
+
+    # Remember, this is a legacy chain so the syntax is pretty different
+    filter_chain = TransformChain(
+        input_variables=["input"],
+        output_variables=["output"],
+        transform=bad_word_filter # transform function defined above
+        # Ignore the "unexpected arg" error, it should work.
+    )
+
+    return filter_chain
