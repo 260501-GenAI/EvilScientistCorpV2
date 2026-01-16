@@ -1,6 +1,7 @@
 # This service will help us initialize and interact with a ChromaDB vector database
 from langchain_chroma import Chroma
 from langchain_community.embeddings import OllamaEmbeddings
+from langchain_core.documents import Document
 
 PERSIST_DIRECTORY = "app/chroma_store" # Where the DB will be stored on disk
 COLLECTION = "evil_items" # What kind of data we're storing (like the tables in SQL)
@@ -28,7 +29,37 @@ def get_vector_store() -> Chroma:
 
 
 # Ingest documents into the vector store (this is where the embeddings happen)
+def ingest_items(items: list[dict[str, any]]) -> int:
 
+    # Get an instance of the vector store
+    db_instance = get_vector_store()
+
+    # Turn the input into a list of documents to get inserted
+    docs = [
+        Document(page_content=item["text"], metadata=item.get("metadata", {}))
+        for item in items
+    ]
+    # Also, attach IDs to the documents (also found in the sample data)
+    ids = [item["id"] for item in items]
+
+    # Add the documents, return the length of the ingested items
+    db_instance.add_documents(docs, ids=ids)
+    return len(items)
 
 # Search the vector store for similar or relevant documents based on a query
+def search(query: str, k: int = 3) -> list[dict[str,any]]:
 
+    # Get an instance of the vector store
+    db_instance = get_vector_store()
+
+    # Save the results of the similarity search
+    results = db_instance.similarity_search(query, k=k)
+
+    # Return the results as a list of dicts with the expected fields
+    return [
+        {
+            "text": result.page_content,
+            "metadata": result.metadata
+        }
+        for result in results
+    ]
