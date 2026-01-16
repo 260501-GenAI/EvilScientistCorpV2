@@ -21,9 +21,10 @@ def init_vector_store():
             embedding_function=OllamaEmbeddings(model="nomic-embed-text")
         )
 
-
-
-# Get an instance of the Chroma vector store
+# Get an instance of the Chroma vector store (lets us interact with the DB instance)
+def get_vector_store() -> Chroma:
+    # We could raise an Exception here if vector_store is None
+    return vector_store
 
 
 # Ingest documents into the vector store (this is where the embeddings happen)
