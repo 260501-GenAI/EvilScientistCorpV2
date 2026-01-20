@@ -44,6 +44,19 @@ def ingest_items(items: list[dict[str, Any]], collection:str = COLLECTION) -> in
     db_instance.add_documents(docs, ids=ids)
     return len(items)
 
+# Different ingest function for ingesting plain text (we'll need to made IDs/metadata)
+def ingest_text(text:str) -> int:
+
+    # Strip the string, removing whitespace from the ends
+
+    # Chunk the raw text into smaller pieces for better embedding
+    # Using a LangChain Transformer
+
+    # Get our chunks as a list[str] so we can iterate over them and reformat them
+
+    # Finally, call ingest_items() now that we have a structured object for embedding
+
+
 # Search the vector store for similar or relevant documents based on a query
 def search(query: str, k: int = 3, collection:str = COLLECTION) -> list[dict[str,Any]]:
 
