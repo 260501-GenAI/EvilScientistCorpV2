@@ -1,0 +1,8 @@
+m https://stackoverflow.com/a/70296198.
+UPDATE max_seq_id SET int_seq_id = (
+  SELECT (
+       (instr('123456789ABCDEF', substr(hex(seq_id), -1 , 1)) <<  0)
+     | (instr('123456789ABCDEF', substr(hex(seq_id), -2 , 1)) <<  4)
+     | (instr('123456789ABCDEF', substr(hex(seq_id), -3 , 1)) <<  8)
+     | (instr('123456789ABCDEF', substr(hex(seq_id), -4 , 1)) << 12)
+     | (instr('123456789ABCDEF', sub

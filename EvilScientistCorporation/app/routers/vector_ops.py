@@ -44,4 +44,4 @@ async def ingest_raw_text(request:IngestTextRequest):
     count = ingest_text(request.text)
     return {"ingested chunks: ":count}
 
-# Endpoint with LLM-powered responses that uses the boss_plans collection
+# Endpoint with LLM-powered response that uses the boss_plans collection
