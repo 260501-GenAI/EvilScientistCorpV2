@@ -95,13 +95,14 @@ def ingest_text(text:str) -> int:
 
 
 # Search the vector store for similar or relevant documents based on a query
-def search(query: str, k: int = 3, collection:str = COLLECTION) -> list[dict[str,Any]]:
+def search(query: str, k: int = 10, collection:str = COLLECTION) -> list[dict[str,Any]]:
 
     # Get an instance of the vector store
     db_instance = get_vector_store(collection)
 
     # Save the results of the similarity search
     results = db_instance.similarity_search_with_score(query, k=k)
+
 
     # Return the results as a list of dicts with the expected fields
     return [

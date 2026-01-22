@@ -51,6 +51,8 @@ async def ingest_raw_text(request:IngestTextRequest):
 # Endpoint with LLM-powered response that uses the boss_plans collection
 @router.post("/search-plans")
 async def search_plans(request:SearchRequest):
+
+    # extract search results from vector DB
     result = search(request.query, request.k, collection="boss_plans")
 
     # Really quick prompt that tells the LLM the returned results
