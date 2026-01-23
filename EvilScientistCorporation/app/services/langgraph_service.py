@@ -1,6 +1,7 @@
 from typing import TypedDict, Any
 
 from langchain_ollama import ChatOllama
+from langgraph.graph import StateGraph
 
 from app.services.vectordb_service import search
 
@@ -111,4 +112,16 @@ def answer_with_context_node(state: GraphState) -> GraphState:
 # Define the function that builds and returns the graph
 # In our endpoint, we'll invoke the graph, not the LLM directly, definitely not a chain
 def build_graph():
+
+    # First, define the graph builder using our state
+    build = StateGraph(GraphState)
+
+    # Route node goes first, determining which node to hit based on user query
+
+    # This ugly block of code executed whichever node we're routing to
+
+    # After either retrieval node runs, invoke the answer node and we're done!
+
+    # Compile and create the invokable graph object. We invoke this in our endpoint!
+
     pass
