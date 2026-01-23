@@ -15,7 +15,7 @@ class ChatInputModel(BaseModel):
 # Endpoint that invokes the graph in the langgraph service
 @router.post("/chat")
 def chat(chat:ChatInputModel):
-    result = langgraph.invoke(chat.input)
+    result = langgraph.invoke({"query":chat.input})
 
     return {
         "route":result.get("route"),

@@ -102,10 +102,10 @@ def answer_with_context_node(state: GraphState) -> GraphState:
     )
 
     # Invoke the LLM from the service with the prompt
-    response = llm.invoke({"input":prompt})
+    response = llm.invoke(prompt)
 
     # Return the answer, which also adds it to state
-    return {"answer":response["text"]}
+    return {"answer":response}
 
 
 # =========================(END OF NODE DEFINITIONS)=============================
@@ -119,9 +119,9 @@ def build_graph():
 
     # Register each node in the graph
     build.add_node("route", route_node)
-    build.add_name("extract_items", extract_items_node)
-    build.add_name("extract_plans", extract_plans_node)
-    build.add_name("answer_with_context_node", answer_with_context_node)
+    build.add_node("extract_items", extract_items_node)
+    build.add_node("extract_plans", extract_plans_node)
+    build.add_node("answer_with_context_node", answer_with_context_node)
 
     # Route node goes first, determining which node to hit based on user query
     build.set_entry_point("route")
@@ -142,10 +142,10 @@ def build_graph():
 
     # After either retrieval node runs, invoke the answer node and we're done!
     build.add_edge("extract_plans", "answer_with_context_node")
-    build.add_sequential_edge("extract_items", "answer_with_context_node")
+    build.add_edge("extract_items", "answer_with_context_node")
 
     # Define the END point of the graph
-    build.set_finish_point("answer_with_context_node") # left out END
+    build.set_finish_point("answer_with_context_node")
 
     # Compile and create the invokable graph object. We invoke this in our endpoint!
     return build.compile()
