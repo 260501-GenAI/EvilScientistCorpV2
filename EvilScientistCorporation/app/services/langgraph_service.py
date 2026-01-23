@@ -1,6 +1,7 @@
 from typing import TypedDict, Any
 
 from langchain_ollama import ChatOllama
+from langgraph.constants import END
 from langgraph.graph import StateGraph
 
 from app.services.vectordb_service import search
@@ -116,12 +117,38 @@ def build_graph():
     # First, define the graph builder using our state
     build = StateGraph(GraphState)
 
+    # Register each node in the graph
+    build.add_node("route", route_node)
+    build.add_name("extract_items", extract_items_node)
+    build.add_name("extract_plans", extract_plans_node)
+    build.add_name("answer_with_context_node", answer_with_context_node)
+
     # Route node goes first, determining which node to hit based on user query
+    build.set_entry_point("route")
 
     # This ugly block of code executed whichever node we're routing to
+    build.add_conditional_edges(
+        "route",
+        # This function returns the key we use to choose an edge
+        # This lambda syntax lets us avoid making a whole extra function
+        lambda state: state["route"],
+
+        # Map that key to the next node
+{
+            "plans":"extract_plans",
+            "items":"extract_items"
+        }
+    )
 
     # After either retrieval node runs, invoke the answer node and we're done!
+    build.add_edge("extract_plans", "answer_with_context_node")
+    build.add_sequential_edge("extract_items", "answer_with_context_node")
+
+    # Define the END point of the graph
+    build.set_finish_point("answer_with_context_node") # left out END
 
     # Compile and create the invokable graph object. We invoke this in our endpoint!
+    return build.compile()
 
-    pass
+# Make a single graph instance (singleton) - ensure only one instance of the graph exists
+langgraph = build_graph()
