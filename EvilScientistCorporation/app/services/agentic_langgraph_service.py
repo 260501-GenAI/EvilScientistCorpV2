@@ -51,3 +51,19 @@ def extract_plans_tool(query:str) -> list[dict[str, Any]]:
     """
     return search(query, k=10, collection="boss_plans")
 
+# Some variables that will help us make the agent aware of the tools
+
+# List of the available tools
+TOOLS = [extract_items_tool, extract_plans_tool]
+
+# Map tool names to their functions in a scalable way
+# We need this to call tools by their name in the agentic router node
+# (See us defining and assigning names in the agentic router node)
+TOOL_MAP = {tool.name: tool for tool in TOOLS}
+
+# Get a version of the LLM that is aware of its toolbox
+llm_with_tools = llm.bind_tools(TOOLS)
+
+# NODES (including our agentic router)--------------------------------------------
+
+
