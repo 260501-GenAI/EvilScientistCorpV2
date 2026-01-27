@@ -37,8 +37,17 @@ class GraphState(TypedDict, total=False): #total=False makes all fields optional
 
 @tool
 def extract_items_tool(query:str) -> list[dict[str, Any]]:
-    """Retrieve relevant evil items or products based on the evil_items vectorDB collection"""
+    """
+    Based on the user's input, the "query" arg, do a semantic search.
+    Retrieve relevant evil items or products based on the evil_items vectorDB collection.
+    """
     return search(query, k=5, collection="evil_items")
 
-
+@tool
+def extract_plans_tool(query:str) -> list[dict[str, Any]]:
+    """
+    Based on the user's input, the "query" arg, do a semantic search.
+    Retrieve relevant docs on the boss's plans/schemes based on the boss_plans vectorDB collection.
+    """
+    return search(query, k=10, collection="boss_plans")
 
