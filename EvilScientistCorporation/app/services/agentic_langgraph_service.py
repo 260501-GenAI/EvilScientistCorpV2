@@ -11,6 +11,7 @@ from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage, AI
 from langchain_core.messages.tool import tool_call
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import add_messages, StateGraph
 
 from app.services.vectordb_service import search
@@ -105,7 +106,7 @@ def agentic_router_node(state: GraphState) -> GraphState:
 
     # Automatically set the route to the answer_with_context node
     return {
-        "route":"answer_with_context",
+        "route":"answer",
         "docs": results
     }
 
@@ -164,4 +165,25 @@ def build_agentic_graph():
     build.add_node("answer", answer_with_context_node)
     build.add_node("chat", general_chat_node)
 
-    # Half done - see you after lunch!
+    # Set our entry point node (the first one to invoke after a user query)
+    build.set_entry_point("router")
+
+    # After the router runs, conditionally choose the next node based on "route" in state
+    build.add_conditional_edges(
+        "route", # Based on the "route" state field...
+        lambda state: state["route"], # Getting the value
+        {
+            "answer":"answer", # If route is "answer, go to answer node
+            "chat":"chat" # Otherwise, go to chat node
+        }
+    )
+
+    # After answer OR chat invoke, we're done! Set that.
+    build.set_finish_point("answer")
+    build.set_finish_point("chat")
+
+    # Finally, compile and return the graph, with a Memory Checkpointer
+    return build.compile(checkpointer=MemorySaver())
+
+# Create a singleton instance of the graph for use in the router endpoint
+agentic_graph = build_agentic_graph()
