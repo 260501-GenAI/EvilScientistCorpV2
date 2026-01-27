@@ -35,7 +35,7 @@ class GraphState(TypedDict, total=False): #total=False makes all fields optional
 # We also won't directly use state in a tool. The agent calls these.
 # IMPORTANT: Each tool needs '''docstrings''' to describe what they do for the agent
 
-@tool
+@tool(name_or_callable="extract_items")
 def extract_items_tool(query:str) -> list[dict[str, Any]]:
     """
     Based on the user's input, the "query" arg, do a semantic search.
@@ -43,7 +43,7 @@ def extract_items_tool(query:str) -> list[dict[str, Any]]:
     """
     return search(query, k=5, collection="evil_items")
 
-@tool
+@tool(name_or_callable="extract_plans")
 def extract_plans_tool(query:str) -> list[dict[str, Any]]:
     """
     Based on the user's input, the "query" arg, do a semantic search.
