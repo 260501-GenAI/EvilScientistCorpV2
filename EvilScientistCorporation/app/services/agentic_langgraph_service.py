@@ -7,7 +7,7 @@ The chat nodes pretty much stay the same
 """
 from typing import TypedDict, Any, Annotated
 
-from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage
+from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage, AIMessage
 from langchain_core.messages.tool import tool_call
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
@@ -92,6 +92,7 @@ def agentic_router_node(state: GraphState) -> GraphState:
     agentic_response = llm_with_tools.invoke(messages)
 
     # If there was no tool call, route to general chat
+    # tool_calls contains a list of ToolCall objects, which has metadata like the tool name
     if not agentic_response.tool_calls:
         return {"route":"chat"}
 
@@ -107,3 +108,48 @@ def agentic_router_node(state: GraphState) -> GraphState:
         "route":"answer_with_context",
         "docs": results
     }
+
+# ANSWER WITH CONTEXT & GENERAL CHAT will stay the same as before :)
+
+# The node that answers the user's query based on docs retrieved from either "extract" node
+def answer_with_context_node(state: GraphState) -> GraphState:
+
+    query = state.get("query", "")
+    docs = state.get("docs", [])
+    combined_docs = "\n\n".join(item["text"] for item in docs)
+
+    prompt = (
+        f"You are an internal assistant at the Evil Scientist Corp."
+        f"You are pretty evil yourself, but still helpful."
+        f"Answer the User's Query based ONLY on the Extracted Data below."
+        f"If the data doesn't help, say you don't know."
+        f"Extracted Data:\n{combined_docs}"
+        f"User Query:\n{query}"
+        f"Answer: "
+    )
+
+    response = llm.invoke(prompt)
+    return {"answer":response}
+
+# Here's the fallback node for general chats (no tools)
+def general_chat_node(state: GraphState) -> GraphState:
+
+    prompt = (
+        f"""You are an internal assistant at the Evil Scientist Corp.
+        You are pretty evil yourself, but still helpful.
+        You have context from previous interactions: \n{state.get('message_memory')}
+        Answer the User's Query to the best of your ability.
+        User Query:\n{state.get('query','')}
+        Answer: """
+    )
+
+    result = llm.invoke(prompt).content
+    return {"answer":result,
+            "message_memory": [
+                HumanMessage(content=state.get("query")),
+                AIMessage(content=result)
+            ]
+            }
+
+# THE GRAPH BUILDER --------------------------------
+# Mostly the same, but uses our new agentic router, and the tools are no longer nodes
