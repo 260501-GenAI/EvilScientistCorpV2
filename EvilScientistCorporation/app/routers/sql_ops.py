@@ -32,4 +32,8 @@ async def create_user(incoming_user: CreateUserModel, db: Session = Depends(get_
     # Finally, we can return the new user!
     return user
 
-
+# Get All Users - basic one liner DB query
+@router.get("/")
+async def get_all_users(db: Session = Depends(get_db)):
+    # Get all records in the users table (referenced by UserDBModel)
+    return db.query(UserDBModel).all()
