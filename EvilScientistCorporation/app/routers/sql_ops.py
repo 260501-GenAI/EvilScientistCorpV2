@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.models.user_db_model import CreateUserModel, UserDBModel
+from app.services.chain_service import get_general_chain
 from app.services.db_connection import get_db
 
 # This is a router just like any other, but it interacts with a SQlite DB
@@ -37,3 +38,25 @@ async def create_user(incoming_user: CreateUserModel, db: Session = Depends(get_
 async def get_all_users(db: Session = Depends(get_db)):
     # Get all records in the users table (referenced by UserDBModel)
     return db.query(UserDBModel).all()
+
+# RAG - get all users, ask LLM a question about them
+# (I'll just hardcode a "tell me about the usernames" prompt)
+@router.get("/rag/usernames")
+async def usernames_chat(db: Session = Depends(get_db)):
+
+    users = db.query(UserDBModel).all() # rewrote get all users... lol
+
+    # get all the username as a list of strings
+    usernames = [user.username for user in users]
+
+    # use the general chain from back in week 2
+    chain = get_general_chain()
+
+    # invoke the chain with a prompt - this is RAG (Retrieval Augmented Generation).
+    response = chain.invoke({
+        "input": f"""Here's a list of usernames {usernames}
+    Comment on each user's username using ONLY the provided usernames. 
+    Don't specify anything other than the usernames and your comments"""
+    })
+
+    return {"response": response, "usernames":usernames}
