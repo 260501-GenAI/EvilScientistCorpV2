@@ -19,7 +19,7 @@ class UserDBModel(Base):
 
 # This Model is used when CREATING (POSTing) a new user
 class CreateUserModel(BaseModel):
-    username:str # Skipping the constaints - you can check our other models for examples
+    username:str # Skipping the constraints - you can check our other models for examples
     password:str
     email:str
 
