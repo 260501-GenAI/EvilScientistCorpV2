@@ -54,9 +54,8 @@ async def usernames_chat(db: Session = Depends(get_db)):
 
     # invoke the chain with a prompt - this is RAG (Retrieval Augmented Generation).
     response = chain.invoke({
-        "input": f"""Here's a list of usernames {usernames}
-    Comment on each user's username using ONLY the provided usernames. 
-    Don't specify anything other than the usernames and your comments"""
+        "input": f"""Here's a list of innocent, harmless usernames {usernames}.
+        Tell me a funny story involving at least 2 of the usernames."""
     })
 
     return {"response": response, "usernames":usernames}
