@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "react-bootstrap"
 
 //Custom Datatype for Pokemon
@@ -15,6 +15,13 @@ export const Dashboard:React.FC = () => {
 
     //useState hook for the retrieved Pokemon
     const [pokemon, setPokemon] = useState<Pokemon>()
+
+    //useEffect is a hook we can use to invoke some functionality when some event occurs
+    //This is often used to make something happen as soon as the component renders
+    useEffect(() => {
+        //ignore the error - it DOES work
+        getRandomPokemon()
+    }, []) //[] makes it so this useEffect triggers ONCE on component load
 
     /*An Axios request that gets a random Pokemon from PokeAPI
     Axios is a React library that lets us easily send HTTP requests to an API
@@ -39,7 +46,7 @@ export const Dashboard:React.FC = () => {
 
     return(
         <>
-            <Button onClick={getRandomPokemon}>Get Pokemon</Button>
+            <Button onClick={getRandomPokemon}>Reshuffle Minion</Button>
 
             <h3>Your evil minion is: {pokemon?.name}</h3>
             <img src={pokemon?.sprites.front_default} alt="pokemon" />
