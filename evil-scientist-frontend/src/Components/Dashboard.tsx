@@ -4,8 +4,11 @@ import { Button } from "react-bootstrap"
 
 //Custom Datatype for Pokemon
 type Pokemon = {
-    name:string;
-    sprite:string
+    name:string
+    sprites:{
+        front_default:string
+        back_default:string
+    }
 }
 
 export const Dashboard:React.FC = () => {
@@ -38,8 +41,9 @@ export const Dashboard:React.FC = () => {
         <>
             <Button onClick={getRandomPokemon}>Get Pokemon</Button>
 
-            <h3>Your evil minion is: [name]</h3>
-            
+            <h3>Your evil minion is: {pokemon?.name}</h3>
+            <img src={pokemon?.sprites.front_default} alt="pokemon" />
+            <img src={pokemon?.sprites.back_default} alt="pokemon" />
         </>
     )
 
