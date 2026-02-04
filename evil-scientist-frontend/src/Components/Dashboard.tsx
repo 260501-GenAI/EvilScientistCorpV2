@@ -25,12 +25,12 @@ export const Dashboard:React.FC = () => {
 
         const randomNum = Math.floor(Math.random() * 1025) + 1
 
-        const randomPokemon:Pokemon = await (await axios.get("https://pokeapi.co/api/v2/pokemon/" + randomNum)).data
+        const randomPokemon = await axios.get("https://pokeapi.co/api/v2/pokemon/" + randomNum)
 
         console.log(randomPokemon)
 
         //Set the retrieved pokemon in state
-        setPokemon(randomPokemon)
+        setPokemon(randomPokemon.data)
 
     }
 
