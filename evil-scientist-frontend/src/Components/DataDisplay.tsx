@@ -4,7 +4,7 @@
     // A value for the header
     // Values for the table
 
-import { Container } from "react-bootstrap"
+import { Container, Table } from "react-bootstrap"
 
 // TODO: Define the props object here
 
@@ -13,11 +13,43 @@ export const DataDisplay:React.FC = () => {
 
 
     return(
-        <Container>
+        <Container className="mt-5">
 
             <h3>[table name here]</h3>
 
+            {/* Here's a bootstrap table. Highly/easily customizable */}
+            <Table bordered striped hover>
+                <thead className="table-dark">
+                    <tr>
+                        <th>col1</th>
+                        <th>col2</th>
+                        <th>col3</th>
+                    </tr>
+                </thead>
 
+                <tbody className="table-secondary">
+                    <tr>
+                        <td>val1</td>
+                        <td>val2</td>
+                        <td>val3</td>
+                    </tr>
+                    <tr>
+                        <td>val1</td>
+                        <td>val2</td>
+                        <td>val3</td>
+                    </tr>
+                                        <tr>
+                        <td>val1</td>
+                        <td>val2</td>
+                        <td>val3</td>
+                    </tr>
+                    <tr>
+                        <td>val1</td>
+                        <td>val2</td>
+                        <td>val3</td>
+                    </tr>
+                </tbody>
+            </Table>
 
         </Container>
     )
