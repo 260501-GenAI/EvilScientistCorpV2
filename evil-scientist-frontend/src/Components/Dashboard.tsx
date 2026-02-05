@@ -65,7 +65,9 @@ export const Dashboard:React.FC = () => {
             <img src={pokemon?.sprites.back_default} alt="pokemon" />
 
             {/* Here's a nested component - we're passing it props for the header and table */}
-            <DataDisplay/>
+            <DataDisplay 
+                title="Users"
+                columns={["username", "id", "password", "email"]}/>
         </>
     )
 

@@ -6,24 +6,29 @@
 
 import { Container, Table } from "react-bootstrap"
 
-// TODO: Define the props object here
+//Defining the props object here - props is short for "properties"
+//Props is just data sent from a parent component to a child component
+type DataDisplayProps = {
+    title:string
+    columns:string[]
+}
 
-export const DataDisplay:React.FC = () => {
-
-
+//Note the <generic> and the data in the arrow function's arguments. That's props
+export const DataDisplay:React.FC<DataDisplayProps> = ({title, columns}) => {
 
     return(
         <Container className="mt-5">
 
-            <h3>[table name here]</h3>
+            <h3>{title}</h3>
 
             {/* Here's a bootstrap table. Highly/easily customizable */}
             <Table bordered striped hover>
                 <thead className="table-dark">
                     <tr>
-                        <th>col1</th>
-                        <th>col2</th>
-                        <th>col3</th>
+                        {/* using the .map() function to iterate thru the columns and render a <th> for each */}
+                        {columns.map(column => (
+                            <th>{column}</th>
+                        ))}
                     </tr>
                 </thead>
 
