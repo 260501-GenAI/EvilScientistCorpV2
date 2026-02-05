@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button } from "react-bootstrap"
+import { DataDisplay } from "./DataDisplay"
 
 //Custom Datatype for Pokemon
 type Pokemon = {
@@ -63,7 +64,8 @@ export const Dashboard:React.FC = () => {
             <img src={pokemon?.sprites.front_default} alt="pokemon" />
             <img src={pokemon?.sprites.back_default} alt="pokemon" />
 
-            <h3>[users table will go here]</h3>
+            {/* Here's a nested component - we're passing it props for the header and table */}
+            <DataDisplay/>
         </>
     )
 
