@@ -12,7 +12,7 @@ export const Login:React.FC = () => {
 
     useEffect(() => {
         usernameRef.current?.focus() //"focus" whatever the ref is pointing to, so the user can type right away
-    })
+    }, [])
 
     //Function that sends a Login request
     const login = () => {
