@@ -21,6 +21,7 @@ export const Dashboard:React.FC = () => {
     useEffect(() => {
         //ignore the error - it DOES work
         getRandomPokemon()
+        getAllUsers()
     }, []) //[] makes it so this useEffect triggers ONCE on component load
 
     /*An Axios request that gets a random Pokemon from PokeAPI
@@ -44,6 +45,16 @@ export const Dashboard:React.FC = () => {
 
     }
 
+    //This function sends a GET request to the API to get all users 
+    const getAllUsers = async () => {
+
+        const users = await axios.get("http://127.0.0.1:8000/sql/")
+
+        console.log(users.data)
+
+    }
+
+
     return(
         <>
             <Button onClick={getRandomPokemon}>Reshuffle Minion</Button>
@@ -51,6 +62,8 @@ export const Dashboard:React.FC = () => {
             <h3>Your evil minion is: {pokemon?.name}</h3>
             <img src={pokemon?.sprites.front_default} alt="pokemon" />
             <img src={pokemon?.sprites.back_default} alt="pokemon" />
+
+            <h3>[users table will go here]</h3>
         </>
     )
 

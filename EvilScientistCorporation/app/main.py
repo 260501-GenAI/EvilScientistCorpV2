@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
+from starlette.middleware.cors import CORSMiddleware
 
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -14,11 +15,14 @@ Base.metadata.create_all(bind=engine)
 # Set up FastAPI. We'll use this "app" variable to do FastAPI stuff below
 app = FastAPI()
 
-# Setting CORS (Cross Origin Resource Sharing) policy
-# origins = ["*"] # Allow all origins (not recommended for production)
-origins = ["http://localhost"] # Allows requests only from localhost
+# Setting CORS (Cross Origin Resource Sharing) policy by adding middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], # React Frontend
+    allow_methods=["*"], # allow all HTTP methods (GET, POST, etc)
+    allow_headers=["*"] # allow all headers (Auth tokens, content type, etc)
+)
 
-#TODO for Ben: CORS middleware setup
 
 # Global custom Exception Handler
 # All Exceptions raised in the routers get handled here
