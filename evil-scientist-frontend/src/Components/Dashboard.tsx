@@ -14,8 +14,10 @@ type Pokemon = {
 
 export const Dashboard:React.FC = () => {
 
-    //useState hook for the retrieved Pokemon
+    //useState hooks for the retrieved Pokemon and for user data
     const [pokemon, setPokemon] = useState<Pokemon>()
+    //Note the use of "any", which is a TS datatype that can be "any" time. 
+    const [users, setUsers] = useState<any>([])
 
     //useEffect is a hook we can use to invoke some functionality when some event occurs
     //This is often used to make something happen as soon as the component renders
@@ -53,6 +55,10 @@ export const Dashboard:React.FC = () => {
 
         console.log(users.data)
 
+        setUsers(users.data)
+
+        console.log(users)
+
     }
 
 
@@ -67,7 +73,9 @@ export const Dashboard:React.FC = () => {
             {/* Here's a nested component - we're passing it props for the header and table */}
             <DataDisplay 
                 title="Users"
-                columns={["username", "id", "password", "email"]}/>
+                columns={["username", "id", "password", "email"]}
+                data={users}
+                />
         </>
     )
 

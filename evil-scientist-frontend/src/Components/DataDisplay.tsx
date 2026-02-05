@@ -11,10 +11,12 @@ import { Container, Table } from "react-bootstrap"
 type DataDisplayProps = {
     title:string
     columns:string[]
+    data:any[]
 }
 
 //Note the <generic> and the data in the arrow function's arguments. That's props
-export const DataDisplay:React.FC<DataDisplayProps> = ({title, columns}) => {
+//Also note the {syntax} in the props field. This is called DESTRUCTURING. It lets us access the props fields as individual variables
+export const DataDisplay:React.FC<DataDisplayProps> = ({title, columns, data}) => {
 
     return(
         <Container className="mt-5">
@@ -32,27 +34,14 @@ export const DataDisplay:React.FC<DataDisplayProps> = ({title, columns}) => {
                     </tr>
                 </thead>
 
-                <tbody className="table-secondary">
+                <tbody>
+                    {data.map((record) => (
                     <tr>
-                        <td>val1</td>
-                        <td>val2</td>
-                        <td>val3</td>
+                        {columns.map((col) => (
+                            <td>{record[col]}</td>
+                        ))}
                     </tr>
-                    <tr>
-                        <td>val1</td>
-                        <td>val2</td>
-                        <td>val3</td>
-                    </tr>
-                                        <tr>
-                        <td>val1</td>
-                        <td>val2</td>
-                        <td>val3</td>
-                    </tr>
-                    <tr>
-                        <td>val1</td>
-                        <td>val2</td>
-                        <td>val3</td>
-                    </tr>
+                    ))}
                 </tbody>
             </Table>
 
