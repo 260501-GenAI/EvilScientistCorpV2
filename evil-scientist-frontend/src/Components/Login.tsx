@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Button, Container, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
+import { store } from "../GlobalData/store"
 
 export const Login:React.FC = () => {
 
@@ -24,6 +25,10 @@ export const Login:React.FC = () => {
         //hardcoded - this would be an HTTP request
 
         if(username == "evilguy" && password == "password"){
+
+            //Set user info in the global data store
+            store.loggedInUser = {"id":1, "username":"evilguy", "email":"suprevl@gmail.com"}
+
             navigate("/dashboard")
         } else {
             alert("Incorrect credentials!")
@@ -41,6 +46,8 @@ export const Login:React.FC = () => {
                     type="text"
                     placeholder="username"
                     name="username"
+                    value={username}
+                    onChange={(event) => setUsername(event.target.value)}
                     ref={usernameRef}
                 />
             </div>
@@ -50,6 +57,8 @@ export const Login:React.FC = () => {
                     type="password"
                     placeholder="password"
                     name="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                 />
             </div>
 
