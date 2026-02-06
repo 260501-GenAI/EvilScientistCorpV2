@@ -7,10 +7,16 @@ export const Chat:React.FC = () => {
     //Set up some state to capture LLM input and output
     const [input, setInput] = useState<string>("")
     const [output, setOutput] = useState<string>("")
+    //One more state object to track whether the LLM response is loading
+    const [loading, setLoading] = useState<boolean>(false)
 
     //Function that sends the chat and captures the response
     const sendMessage = async () => {
 
+        //set loading to true as the LLM response loads
+        setLoading(true)
+
+        //Send the axios request and store the response
         const response = await axios.post("http://127.0.0.1:8000/chat/memory-chat", {input:input})
 
         //print out the response just to see it
@@ -25,9 +31,10 @@ export const Chat:React.FC = () => {
             response 2 is the field in data called "response"*/
 
         setInput("")
+        setLoading(false)
 
-        //temporary, to delete
-        alert(output)
+        // //temporary, to delete
+        // alert(output)
 
     }
 
@@ -44,8 +51,20 @@ export const Chat:React.FC = () => {
             className="mb-2"
             />
 
-            <Button onClick={sendMessage}>Send Message</Button>
+            {/* if loading == true, this button will be disabled */}
+            <Button onClick={sendMessage} disabled={loading}>
+                {/* TERNARY OPERATOR FOR CONDITIONAL RENDERING */}
+                {loading ? "Thinking..." : "Send Message"}
+                {/* In English: If loading == true, the button says "Thinking..." */}
+            </Button>
 
+            {/* Another style of conditional rendering - If there is a value for our output state object, render it on the page. Otherwise render nothing */}
+            {output && (
+                <Card>
+                    <h4>Response: </h4>
+                    <p>{output}</p>
+                </Card>
+            )}
 
         </Card>
     )
