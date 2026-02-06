@@ -1,8 +1,12 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button, Container, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
 export const Login:React.FC = () => {
+
+    //Set up state for username and password
+    const [username, setUsername] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
 
     //define my useNavigate hook so we can switch URLs programmatically 
     const navigate = useNavigate()
@@ -16,7 +20,15 @@ export const Login:React.FC = () => {
 
     //Function that sends a Login request
     const login = () => {
-        navigate("/dashboard")
+
+        //hardcoded - this would be an HTTP request
+
+        if(username == "evilguy" && password == "password"){
+            navigate("/dashboard")
+        } else {
+            alert("Incorrect credentials!")
+        }
+        
     }
 
     return(
