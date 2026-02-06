@@ -6,7 +6,7 @@ export const Chat:React.FC = () => {
 
     //Set up some state to capture LLM input and output
     const [input, setInput] = useState<string>("")
-    const [response, setResponse] = useState<string>("")
+    const [output, setOutput] = useState<string>("")
 
     //Function that sends the chat and captures the response
     const sendMessage = async () => {
@@ -17,7 +17,7 @@ export const Chat:React.FC = () => {
         console.log(response)
 
         //set the response in state, wipe the input state
-        setResponse(response.data.response)
+        setOutput(response.data.response)
         /* response.data.response?? wut
 
             response 1 is the actual HTTP response
@@ -27,7 +27,7 @@ export const Chat:React.FC = () => {
         setInput("")
 
         //temporary, to delete
-        alert(response)
+        alert(output)
 
     }
 
