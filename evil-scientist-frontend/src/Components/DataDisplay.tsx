@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // This component consists of a variable header and table
 // The value for the header and table is based on the data that gets passed in through props
 // This is a HIGHLY REUSEABLE COMPONENT! Whenever we call it, we give it:

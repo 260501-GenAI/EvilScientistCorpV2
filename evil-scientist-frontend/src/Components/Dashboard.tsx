@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button } from "react-bootstrap"
 import { DataDisplay } from "./DataDisplay"
+import { Chat } from "./Chat"
 
-//Custom Datatype for Pokemon
+//Custom Datatype for Pokemon. Could have also been an interface if we planned to make subtypes
 type Pokemon = {
     name:string
     sprites:{
@@ -76,6 +78,11 @@ export const Dashboard:React.FC = () => {
                 columns={["username", "id", "password", "email"]}
                 data={users}
                 />
+
+            <br />
+
+            <Chat/>
+
         </>
     )
 
