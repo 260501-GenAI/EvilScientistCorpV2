@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap"
 import { DataDisplay } from "./DataDisplay"
 import { Chat } from "./Chat"
 import { store } from "../GlobalData/store"
+import { useNavigate } from "react-router-dom"
 
 //Custom Datatype for Pokemon. Could have also been an interface if we planned to make subtypes
 type Pokemon = {
@@ -17,6 +18,8 @@ type Pokemon = {
 
 export const Dashboard:React.FC = () => {
 
+    const navigate = useNavigate()
+
     //useState hooks for the retrieved Pokemon and for user data
     const [pokemon, setPokemon] = useState<Pokemon>()
     //Note the use of "any", which is a TS datatype that can be "any" time. 
@@ -25,6 +28,13 @@ export const Dashboard:React.FC = () => {
     //useEffect is a hook we can use to invoke some functionality when some event occurs
     //This is often used to make something happen as soon as the component renders
     useEffect(() => {
+
+        //really basic route guard - the "loggedInUsername" doesn't exist...
+        //...navigate back to login
+        if(!localStorage.getItem("loggedInUsername")){
+            navigate("/")
+        }
+
         //ignore the error - it DOES work
         getRandomPokemon()
         getAllUsers()
