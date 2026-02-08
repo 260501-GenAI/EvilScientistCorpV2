@@ -3,6 +3,7 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Login } from './Components/Login'
 import { Dashboard } from './Components/Dashboard'
+import { Register } from './Components/Register'
 
 function App() {
  
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/register" element={<Register/>}/>
         </Routes>
       </BrowserRouter>
 

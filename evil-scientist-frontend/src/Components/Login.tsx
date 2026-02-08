@@ -2,8 +2,12 @@ import { useEffect, useRef, useState } from "react"
 import { Button, Container, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import { store } from "../GlobalData/store"
+import { useUser } from "../ContextApi/UserContext"
 
 export const Login:React.FC = () => {
+
+    //Defining a variable that gives access to the User data in our UserContext
+    const { setUser } = useUser();
 
     //Set up state for username and password
     const [username, setUsername] = useState<string>("")
@@ -26,8 +30,17 @@ export const Login:React.FC = () => {
 
         if(username == "evilguy" && password == "password"){
 
-            //Set user info in the global data store
-            store.loggedInUser = {"id":1, "username":"evilguy", "email":"suprevl@gmail.com"}
+            // OLD - global data file - Set user info in the global data store
+            // store.loggedInUser = {"id":1, "username":"evilguy", "email":"suprevl@gmail.com"}
+
+            //Using context api now - set the user data in the UserContext
+
+            const loggedInUser = {"id":1, "username":"evilguy", "email":"suprevl@gmail.com"}
+
+            setUser(loggedInUser)
+
+            //Also, setting username data in localStorage so it persists on refresh
+            localStorage.setItem("loggedInUsername", loggedInUser.username)
 
             navigate("/dashboard")
         } else {
@@ -63,6 +76,7 @@ export const Login:React.FC = () => {
             </div>
 
             <Button className="btn-success m-1" onClick={login}>Login</Button>
+            <Button className="btn-dark m-1" onClick={()=>navigate("/register")}>Register</Button>
         </Container>
     )
 

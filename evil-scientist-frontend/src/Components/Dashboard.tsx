@@ -69,7 +69,8 @@ export const Dashboard:React.FC = () => {
         <>
             <Button onClick={getRandomPokemon}>Reshuffle Minion</Button>
 
-            <h3>Hello, {store.loggedInUser.username}. Your evil minion is: {pokemon?.name}</h3>
+            {/*<h3>Hello, {store.loggedInUser.username}. Your evil minion is: {pokemon?.name}</h3>*/}
+            <h3>Hello, {localStorage.getItem("loggedInUsername")}. Your evil minion is: {pokemon?.name}</h3>
             <img src={pokemon?.sprites.front_default} alt="pokemon" />
             <img src={pokemon?.sprites.back_default} alt="pokemon" />
 
